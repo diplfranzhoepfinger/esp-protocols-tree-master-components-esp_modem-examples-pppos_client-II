@@ -9,13 +9,46 @@ dependencies:
       registry_url: https://components.espressif.com/
       type: service
     version: 1.1.0
+  espressif/esp_modem_usb_dte:
+    component_hash: 49f66a3bd49202e36168cf092a1dc453548d488e8f4560ac7e7d21802583e8a7
+    dependencies:
+    - name: espressif/esp_modem
+      registry_url: https://components.espressif.com/
+      require: private
+      version: '>=0.1.28,<2.0.0'
+    - name: idf
+      require: private
+      version: '>=4.4'
+    - name: espressif/usb_host_cdc_acm
+      registry_url: https://components.espressif.com/
+      require: private
+      version: 2.*
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.2.1
+  espressif/usb_host_cdc_acm:
+    component_hash: 7e13d20138931efa74bc43618a9e0c5094039e0125727403ffd8f7c87feb6b73
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.4'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    targets:
+    - esp32s2
+    - esp32s3
+    - esp32p4
+    version: 2.0.4
   idf:
     source:
       type: idf
     version: 5.3.1
 direct_dependencies:
 - espressif/esp_modem
+- espressif/esp_modem_usb_dte
 - idf
-manifest_hash: e1f701f7f5e651e0f6672ab03842828b3808117d67ce1514562af131124640a0
+manifest_hash: c63c45ef7bea3c2915ef94b9501995dd2f9fe41fa72d9e26d54918dc731fd314
 target: esp32s3
 version: 2.0.0
