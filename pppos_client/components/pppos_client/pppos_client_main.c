@@ -56,7 +56,7 @@ static void usb_terminal_error_handler(esp_modem_terminal_error_t err)
 #define CHECK_USB_DISCONNECTION(event_group) \
 if ((xEventGroupGetBits(event_group) & USB_DISCONNECTED_BIT) == USB_DISCONNECTED_BIT) { \
     esp_modem_destroy(dce); \
-    continue; \
+    ; \
 }
 #else
 #define CHECK_USB_DISCONNECTION(event_group)
@@ -214,7 +214,7 @@ void pppos_client_main(void)
     }
 
 #elif defined(CONFIG_EXAMPLE_SERIAL_CONFIG_USB)
-    while (1) {
+		// no While Loop, want it 1 time. 
 #if CONFIG_EXAMPLE_MODEM_DEVICE_BG96 == 1
         ESP_LOGI(TAG, "Initializing esp_modem for the BG96 module...");
         struct esp_modem_usb_term_config usb_config = ESP_MODEM_BG96_USB_CONFIG();
@@ -331,15 +331,10 @@ void pppos_client_main(void)
     }
     ESP_LOGI(TAG, "IMSI=%s", imsi);
 
-#if defined(CONFIG_EXAMPLE_SERIAL_CONFIG_USB)
-    // USB example runs in a loop to demonstrate hot-plugging and sudden disconnection features.
-    ESP_LOGI(TAG, "USB demo finished. Disconnect and connect the modem to run it again");
-    xEventGroupWaitBits(event_group, USB_DISCONNECTED_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
-    CHECK_USB_DISCONNECTION(event_group); // dce will be destroyed here
-} // while (1)
-#else
-    // UART DTE clean-up
-    esp_modem_destroy(dce);
-    esp_netif_destroy(esp_netif);
-#endif
+
+	//not Destroy DTE, should live. 
+	// go on with NMEA Port Example. 
+
+
+
 }
