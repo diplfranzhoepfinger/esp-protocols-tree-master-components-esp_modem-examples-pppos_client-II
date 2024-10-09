@@ -21,7 +21,7 @@
 #define EXAMPLE_USB_HOST_PRIORITY   (20)
 #define EXAMPLE_USB_DEVICE_VID      (0x1E0E)
 #define EXAMPLE_USB_DEVICE_PID      (0x9011) // 0x1E0E:0x9011
-#define EXAMPLE_TX_STRING           ("CDC test string!")
+#define EXAMPLE_TX_STRING           ("AT\n")
 #define EXAMPLE_TX_TIMEOUT_MS       (1000)
 
 static const char *TAG = "USB-CDC";
@@ -133,7 +133,7 @@ void usb_cdc_example_main(void)
 
         // Open USB device from tusb_serial_device example example. Either single or dual port configuration.
         ESP_LOGI(TAG, "Opening CDC ACM device 0x%04X:0x%04X...", EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID);
-        esp_err_t err = cdc_acm_host_open(EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID, 0, &dev_config, &cdc_dev);
+        esp_err_t err = cdc_acm_host_open_vendor_specific(EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID, 3, &dev_config, &cdc_dev);
         if (ESP_OK != err) {
             ESP_LOGI(TAG, "Failed to open device");
             continue;
