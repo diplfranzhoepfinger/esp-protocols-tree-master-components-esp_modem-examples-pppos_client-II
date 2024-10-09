@@ -2,10 +2,12 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+
+extern void pppos_client_main(void);
+
 void app_main(void)
 {
-    while (true) {
-        printf("Hello from app_main!\n");
-        sleep(1);
-    }
+
+    pppos_client_main();
+
 }

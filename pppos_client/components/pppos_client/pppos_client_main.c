@@ -149,7 +149,7 @@ static void on_ip_event(void *arg, esp_event_base_t event_base,
 }
 
 
-void app_main(void)
+void pppos_client_main(void)
 {
     /* Init and register system/core components */
     ESP_ERROR_CHECK(esp_netif_init());
