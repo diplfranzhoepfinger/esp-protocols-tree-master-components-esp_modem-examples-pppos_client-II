@@ -19,9 +19,8 @@
 #include "usb/cdc_acm_host.h"
 
 #define EXAMPLE_USB_HOST_PRIORITY   (20)
-#define EXAMPLE_USB_DEVICE_VID      (0x303A)
-#define EXAMPLE_USB_DEVICE_PID      (0x4001) // 0x303A:0x4001 (TinyUSB CDC device)
-#define EXAMPLE_USB_DEVICE_DUAL_PID (0x4002) // 0x303A:0x4002 (TinyUSB Dual CDC device)
+#define EXAMPLE_USB_DEVICE_VID      (0x1E0E)
+#define EXAMPLE_USB_DEVICE_PID      (0x9011) // 0x1E0E:0x9011
 #define EXAMPLE_TX_STRING           ("CDC test string!")
 #define EXAMPLE_TX_TIMEOUT_MS       (1000)
 
