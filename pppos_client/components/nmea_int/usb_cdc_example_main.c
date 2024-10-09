@@ -100,7 +100,7 @@ static void usb_lib_task(void *arg)
  *
  * Here we open a USB CDC device and send some data to it
  */
-void app_main(void)
+void usb_cdc_example_main(void)
 {
     device_disconnected_sem = xSemaphoreCreateBinary();
     assert(device_disconnected_sem);
