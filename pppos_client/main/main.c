@@ -11,8 +11,9 @@ void app_main(void)
 {
 
 
+    pppos_client_main();
 	usb_cdc_example_main();
 
-    //pppos_client_main();
+
 
 }
