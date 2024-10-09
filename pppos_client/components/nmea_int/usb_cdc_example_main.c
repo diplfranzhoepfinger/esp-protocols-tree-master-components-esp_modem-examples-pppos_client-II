@@ -21,8 +21,6 @@
 #define EXAMPLE_USB_HOST_PRIORITY   (20)
 #define EXAMPLE_USB_DEVICE_VID      (0x1E0E)
 #define EXAMPLE_USB_DEVICE_PID      (0x9011) // 0x1E0E:0x9011
-#define EXAMPLE_TX_STRING           ("AT\n")
-#define EXAMPLE_TX_TIMEOUT_MS       (1000)
 
 static const char *TAG = "USB-CDC";
 
@@ -137,29 +135,6 @@ void usb_cdc_example_main(void)
     cdc_acm_host_desc_print(cdc_dev);
     vTaskDelay(pdMS_TO_TICKS(100));
 
-    // Test sending and receiving: responses are handled in handle_rx callback
-    ESP_ERROR_CHECK(cdc_acm_host_data_tx_blocking(cdc_dev, (const uint8_t *)EXAMPLE_TX_STRING, strlen(EXAMPLE_TX_STRING), EXAMPLE_TX_TIMEOUT_MS));
-    vTaskDelay(pdMS_TO_TICKS(100));
-
-    // Test Line Coding commands: Get current line coding, change it 9600 7N1 and read again
-    ESP_LOGI(TAG, "Setting up line coding");
-
-    cdc_acm_line_coding_t line_coding;
-    ESP_ERROR_CHECK(cdc_acm_host_line_coding_get(cdc_dev, &line_coding));
-    ESP_LOGI(TAG, "Line Get: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
-             line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
-
-    line_coding.dwDTERate = 9600;
-    line_coding.bDataBits = 7;
-    line_coding.bParityType = 1;
-    line_coding.bCharFormat = 1;
-    ESP_ERROR_CHECK(cdc_acm_host_line_coding_set(cdc_dev, &line_coding));
-    ESP_LOGI(TAG, "Line Set: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
-             line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
-
-    ESP_ERROR_CHECK(cdc_acm_host_line_coding_get(cdc_dev, &line_coding));
-    ESP_LOGI(TAG, "Line Get: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
-             line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
 
     ESP_ERROR_CHECK(cdc_acm_host_set_control_line_state(cdc_dev, true, false));
 
