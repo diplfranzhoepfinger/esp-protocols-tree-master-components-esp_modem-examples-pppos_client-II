@@ -25,7 +25,6 @@
 #define EXAMPLE_TX_TIMEOUT_MS       (1000)
 
 static const char *TAG = "USB-CDC";
-static SemaphoreHandle_t device_disconnected_sem;
 
 /**
  * @brief Data received callback
@@ -61,7 +60,6 @@ static void handle_event(const cdc_acm_host_dev_event_data_t *event, void *user_
     case CDC_ACM_HOST_DEVICE_DISCONNECTED:
         ESP_LOGI(TAG, "Device suddenly disconnected");
         ESP_ERROR_CHECK(cdc_acm_host_close(event->data.cdc_hdl));
-        xSemaphoreGive(device_disconnected_sem);
         break;
     case CDC_ACM_HOST_SERIAL_STATE:
         ESP_LOGI(TAG, "Serial state notif 0x%04X", event->data.serial_state.val);
@@ -101,8 +99,7 @@ static void usb_lib_task(void *arg)
  */
 void usb_cdc_example_main(void)
 {
-    device_disconnected_sem = xSemaphoreCreateBinary();
-    assert(device_disconnected_sem);
+
 
     // Install USB Host driver. Should only be called once in entire application
     ESP_LOGI(TAG, "Installing USB Host");
@@ -169,7 +166,7 @@ void usb_cdc_example_main(void)
     ESP_ERROR_CHECK(cdc_acm_host_set_control_line_state(cdc_dev, true, false));
 
     // We are done. Wait for device disconnection and start over
-    ESP_LOGI(TAG, "Example finished successfully! You can reconnect the device to run again.");
-    xSemaphoreTake(device_disconnected_sem, portMAX_DELAY);
+    ESP_LOGI(TAG, "Example finished successfully! go on with Modem.");
+
 
 }
