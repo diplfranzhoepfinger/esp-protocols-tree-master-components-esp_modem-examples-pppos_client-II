@@ -99,20 +99,11 @@ void usb_cdc_example_main(void)
 {
 
 
-    // Install USB Host driver. Should only be called once in entire application
-    ESP_LOGI(TAG, "Installing USB Host");
-    const usb_host_config_t host_config = {
-        .skip_phy_setup = false,
-        .intr_flags = ESP_INTR_FLAG_LEVEL1,
-    };
-    ESP_ERROR_CHECK(usb_host_install(&host_config));
 
     // Create a task that will handle USB library events
     BaseType_t task_created = xTaskCreate(usb_lib_task, "usb_lib", 4096, xTaskGetCurrentTaskHandle(), EXAMPLE_USB_HOST_PRIORITY, NULL);
     assert(task_created == pdTRUE);
 
-    ESP_LOGI(TAG, "Installing CDC-ACM driver");
-    ESP_ERROR_CHECK(cdc_acm_host_install(NULL));
 
     const cdc_acm_host_device_config_t dev_config = {
         .connection_timeout_ms = 1000,
