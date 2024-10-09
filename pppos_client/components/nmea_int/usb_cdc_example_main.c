@@ -128,48 +128,48 @@ void usb_cdc_example_main(void)
         .data_cb = handle_rx
     };
 
-    while (true) {
-        cdc_acm_dev_hdl_t cdc_dev = NULL;
 
-        // Open USB device from tusb_serial_device example example. Either single or dual port configuration.
-        ESP_LOGI(TAG, "Opening CDC ACM device 0x%04X:0x%04X...", EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID);
-        esp_err_t err = cdc_acm_host_open_vendor_specific(EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID, 3, &dev_config, &cdc_dev);
-        if (ESP_OK != err) {
-            ESP_LOGI(TAG, "Failed to open device");
-            continue;
+    cdc_acm_dev_hdl_t cdc_dev = NULL;
 
-        }
-        cdc_acm_host_desc_print(cdc_dev);
-        vTaskDelay(pdMS_TO_TICKS(100));
+    // Open USB device from tusb_serial_device example example. Either single or dual port configuration.
+    ESP_LOGI(TAG, "Opening CDC ACM device 0x%04X:0x%04X...", EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID);
+    esp_err_t err = cdc_acm_host_open_vendor_specific(EXAMPLE_USB_DEVICE_VID, EXAMPLE_USB_DEVICE_PID, 3, &dev_config, &cdc_dev);
+    if (ESP_OK != err) {
+        ESP_LOGI(TAG, "Failed to open device");
+        continue;
 
-        // Test sending and receiving: responses are handled in handle_rx callback
-        ESP_ERROR_CHECK(cdc_acm_host_data_tx_blocking(cdc_dev, (const uint8_t *)EXAMPLE_TX_STRING, strlen(EXAMPLE_TX_STRING), EXAMPLE_TX_TIMEOUT_MS));
-        vTaskDelay(pdMS_TO_TICKS(100));
-
-        // Test Line Coding commands: Get current line coding, change it 9600 7N1 and read again
-        ESP_LOGI(TAG, "Setting up line coding");
-
-        cdc_acm_line_coding_t line_coding;
-        ESP_ERROR_CHECK(cdc_acm_host_line_coding_get(cdc_dev, &line_coding));
-        ESP_LOGI(TAG, "Line Get: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
-                 line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
-
-        line_coding.dwDTERate = 9600;
-        line_coding.bDataBits = 7;
-        line_coding.bParityType = 1;
-        line_coding.bCharFormat = 1;
-        ESP_ERROR_CHECK(cdc_acm_host_line_coding_set(cdc_dev, &line_coding));
-        ESP_LOGI(TAG, "Line Set: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
-                 line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
-
-        ESP_ERROR_CHECK(cdc_acm_host_line_coding_get(cdc_dev, &line_coding));
-        ESP_LOGI(TAG, "Line Get: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
-                 line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
-
-        ESP_ERROR_CHECK(cdc_acm_host_set_control_line_state(cdc_dev, true, false));
-
-        // We are done. Wait for device disconnection and start over
-        ESP_LOGI(TAG, "Example finished successfully! You can reconnect the device to run again.");
-        xSemaphoreTake(device_disconnected_sem, portMAX_DELAY);
     }
+    cdc_acm_host_desc_print(cdc_dev);
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    // Test sending and receiving: responses are handled in handle_rx callback
+    ESP_ERROR_CHECK(cdc_acm_host_data_tx_blocking(cdc_dev, (const uint8_t *)EXAMPLE_TX_STRING, strlen(EXAMPLE_TX_STRING), EXAMPLE_TX_TIMEOUT_MS));
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    // Test Line Coding commands: Get current line coding, change it 9600 7N1 and read again
+    ESP_LOGI(TAG, "Setting up line coding");
+
+    cdc_acm_line_coding_t line_coding;
+    ESP_ERROR_CHECK(cdc_acm_host_line_coding_get(cdc_dev, &line_coding));
+    ESP_LOGI(TAG, "Line Get: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
+             line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
+
+    line_coding.dwDTERate = 9600;
+    line_coding.bDataBits = 7;
+    line_coding.bParityType = 1;
+    line_coding.bCharFormat = 1;
+    ESP_ERROR_CHECK(cdc_acm_host_line_coding_set(cdc_dev, &line_coding));
+    ESP_LOGI(TAG, "Line Set: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
+             line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
+
+    ESP_ERROR_CHECK(cdc_acm_host_line_coding_get(cdc_dev, &line_coding));
+    ESP_LOGI(TAG, "Line Get: Rate: %"PRIu32", Stop bits: %"PRIu8", Parity: %"PRIu8", Databits: %"PRIu8"",
+             line_coding.dwDTERate, line_coding.bCharFormat, line_coding.bParityType, line_coding.bDataBits);
+
+    ESP_ERROR_CHECK(cdc_acm_host_set_control_line_state(cdc_dev, true, false));
+
+    // We are done. Wait for device disconnection and start over
+    ESP_LOGI(TAG, "Example finished successfully! You can reconnect the device to run again.");
+    xSemaphoreTake(device_disconnected_sem, portMAX_DELAY);
+
 }
