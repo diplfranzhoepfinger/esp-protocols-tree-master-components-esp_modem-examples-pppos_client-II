@@ -226,6 +226,7 @@ void pppos_client_main(void)
 #elif CONFIG_EXAMPLE_MODEM_DEVICE_A7670 == 1
         ESP_LOGI(TAG, "Initializing esp_modem for the A7670 module...");
         struct esp_modem_usb_term_config usb_config = ESP_MODEM_A7670_USB_CONFIG();
+        usb_config.install_usb_host = false;
         esp_modem_dce_device_t usb_dev_type = ESP_MODEM_DCE_SIM7600;
 #else
 #error USB modem not selected
