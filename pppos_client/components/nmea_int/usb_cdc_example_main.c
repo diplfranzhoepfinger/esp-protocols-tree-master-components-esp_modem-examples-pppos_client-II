@@ -112,7 +112,13 @@ void usb_cdc_example_main(void)
     assert(task_created == pdTRUE);
 
     ESP_LOGI(TAG, "Installing CDC-ACM driver");
-    ESP_ERROR_CHECK(cdc_acm_host_install(NULL));
+            const cdc_acm_host_driver_config_t my_cdc_acm_driver_config = {
+            .driver_task_stack_size = 4096,
+            .driver_task_priority = 5,
+            .xCoreID = (BaseType_t)0,
+            .new_dev_cb = NULL, // We don't forward this information to user. User can poll USB Host Lib.
+        };
+    ESP_ERROR_CHECK(cdc_acm_host_install(&my_cdc_acm_driver_config));
 
     const cdc_acm_host_device_config_t dev_config = {
         .connection_timeout_ms = 1000,
