@@ -171,6 +171,15 @@ void pppos_client_main(void)
     assert(esp_netif);
 
     event_group = xEventGroupCreate();
+    
+    
+    #ifdef CONFIG_ESP_MODEM_URC_HANDLER
+    	ESP_LOGI(TAG, "Adding URC handler");
+        esp_modem_set_urc(handle_urc);
+    #endif
+    
+    
+    
 
     /* Configure the DTE */
 #if defined(CONFIG_EXAMPLE_SERIAL_CONFIG_UART)
