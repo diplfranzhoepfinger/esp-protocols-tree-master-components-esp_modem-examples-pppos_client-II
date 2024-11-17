@@ -148,6 +148,13 @@ static void on_ip_event(void *arg, esp_event_base_t event_base,
     }
 }
 
+#ifdef CONFIG_ESP_MODEM_URC_HANDLER
+esp_err_t handle_urc(uint8_t *data, size_t len)
+{
+    ESP_LOG_BUFFER_HEXDUMP("on_read", data, len, ESP_LOG_INFO);
+    return ESP_ERR_TIMEOUT;
+}
+#endif
 
 void pppos_client_main(void)
 {
